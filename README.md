@@ -26,8 +26,8 @@ Você envia uma imagem do gabarito preenchido (com marcações feitas, por exemp
 Clone o repositório e instale as dependências:
 
 ```bash
-git clone https://github.com/seu-usuario/gabicam-api.git
-cd gabicam-api
+git clone https://github.com/paulohique/Trabalho-Dispositivo-Movel.git
+cd Trabalho-Dispositivo-Movel
 pip install -r requirements.txt
 ```
 
@@ -114,4 +114,4 @@ Você pode visualizar e testar a API através da interface Swagger em:
 
 ## 👨‍💻 Autor
 
-Feito com 💻 por [Seu Nome](https://github.com/seu-usuario)
+Feito com 💻 por [Paulo Henrique e Matheus Bomtempo](https://github.com/paulohique)
