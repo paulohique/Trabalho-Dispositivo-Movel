@@ -114,4 +114,4 @@ Você pode visualizar e testar a API através da interface Swagger em:
 
 ## 👨‍💻 Autor
 
-Feito com 💻 por [Paulo Henrique e Matheus Bomtempo](https://github.com/paulohique)
+Feito com 💻 por [Paulo Henrique ](https://github.com/paulohique)

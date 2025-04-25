@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import tempfile
 import os
-
+from Keys.apiKeys import verificar_api_key
 app = Flask(__name__)
 
 # === Função para processar imagem e verificar acertos ===
@@ -106,6 +106,13 @@ def corrigir():
     os.unlink(tmp_path)
 
     return jsonify(resultado)
+
+@app.before_request
+def validar_chave():
+    resultado = verificar_api_key()
+    if resultado:  # Se for um response, retorna erro
+        return resultado
+
 
 if __name__ == '__main__':
     app.run(debug=True)
