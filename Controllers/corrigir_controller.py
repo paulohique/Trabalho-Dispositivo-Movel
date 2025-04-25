@@ -5,6 +5,8 @@ import cv2
 from Models.gabarito_model import corrigir_gabarito
 from Models.api_key_model import verificar_api_key
 
+
+#Correção da Prova
 def corrigir():
     if 'imagem' not in request.files:
         return jsonify({"erro": "Imagem não enviada"}), 400

@@ -9,8 +9,6 @@ import mysql.connector
 from Models.gabarito_model import corrigir_gabarito
 
 
-# ... (sua função corrigir_gabarito permanece igual aqui)
-
 
 def submeter_prova():
     if 'nome' not in request.form:
@@ -66,7 +64,7 @@ def submeter_prova():
         conn.close()
 
 
-    # ...
+    #Simplifica o resultado obtido pelo gabarito
 
     return jsonify({
         "nome": nome,
