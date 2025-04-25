@@ -1,0 +1,93 @@
+openapi: 3.0.3
+info:
+  title: API de Correção de Gabaritos - Gabicam
+  description: API que detecta e corrige gabaritos a partir de imagens enviadas via formulário.
+  version: "1.0.0"
+
+servers:
+  - url: http://localhost:5000
+    description: Servidor local de desenvolvimento
+
+paths:
+  /corrigir:
+    post:
+      summary: Corrige um gabarito enviado com uma imagem
+      security:
+        - ApiKeyAuth: ['teste']  # Referência à segurança
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                imagem:
+                  type: string
+                  format: binary
+                  description: Arquivo de imagem com o gabarito marcado.
+                gabarito:
+                  type: string
+                  example: "ABCDEACDAB"
+                  description: Sequência de respostas do gabarito oficial.
+      responses:
+        '200':
+          description: Correção realizada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  respostas_detectadas:
+                    type: array
+                    items:
+                      type: string
+                    example: ["A", "B", "C", "D", "E", "A", "C", "D", "A", "B"]
+                  gabarito:
+                    type: array
+                    items:
+                      type: string
+                    example: ["A", "B", "C", "D", "E", "A", "C", "D", "A", "B"]
+                  acertos:
+                    type: integer
+                    example: 10
+                  total_questoes:
+                    type: integer
+                    example: 10
+        '400':
+          description: Erro no envio da requisição
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  erro:
+                    type: string
+                    example: "Imagem não enviada"
+        '401':
+          description: API Key ausente ou inválida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  erro:
+                    type: string
+                    example: "API Key ausente ou inválida"
+        '403':
+          description: API Key expirada ou inativa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  erro:
+                    type: string
+                    example: "API Key expirada ou inativa"
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: api-key
+      description: Chave de acesso obrigatória para autenticação da API
