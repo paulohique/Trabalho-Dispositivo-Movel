@@ -4,6 +4,7 @@ import numpy as np
 import tempfile
 import os
 from Keys.apiKeys import verificar_api_key
+
 app = Flask(__name__)
 
 # === Função para processar imagem e verificar acertos ===
@@ -107,11 +108,13 @@ def corrigir():
 
     return jsonify(resultado)
 
+
 @app.before_request
-def validar_chave():
+def validar_api_key():
     resultado = verificar_api_key()
-    if resultado:  # Se for um response, retorna erro
+    if resultado:
         return resultado
+
 
 
 if __name__ == '__main__':

@@ -1,28 +1,39 @@
-# Simulação de API Keys com contador de uso
+import mysql.connector
 from flask import request, jsonify
 
-from Main import app
-
-api_keys = {
-    "minha-chave-secreta-123": {"usos_restantes": 10, "ativa": True},
-    "chave-expira-1vez": {"usos_restantes": 1, "ativa": True}
-}
-
-
-@app.before_request
 def verificar_api_key():
     chave = request.headers.get('x-api-key')
 
-    if not chave or chave not in api_keys:
-        return jsonify({"erro": "API Key ausente ou inválida"}), 401
+    if not chave:
+        return jsonify({"erro": "API Key ausente"}), 401
 
-    info = api_keys[chave]
+    try:
+        conn = mysql.connector.connect(
+            host='localhost',
+            user='root',
+            password='',
+            database='Gabicam'
+        )
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM apiKeys WHERE chave = %s", (chave,))
+        result = cursor.fetchone()
 
-    if not info["ativa"] or info["usos_restantes"] <= 0:
-        return jsonify({"erro": "API Key expirada ou inativa"}), 403
+        if not result:
+            return jsonify({"erro": "API Key inválida"}), 401
 
-    # Decrementa usos
-    info["usos_restantes"] -= 1
+        if not result['ativa'] or result['usos_restantes'] <= 0:
+            return jsonify({"erro": "API Key expirada ou inativa"}), 403
 
-    if info["usos_restantes"] <= 0:
-        info["ativa"] = False
+        # Atualiza contador de uso
+        cursor.execute(
+            "UPDATE api_keys SET usos_restantes = usos_restantes - 1 WHERE id = %s",
+            (result['id'],)
+        )
+        conn.commit()
+
+    except Exception as e:
+        return jsonify({"erro": "Erro no servidor: " + str(e)}), 500
+
+    finally:
+        cursor.close()
+        conn.close()
