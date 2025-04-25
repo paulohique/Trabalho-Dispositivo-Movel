@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import tempfile
 import os
-from Keys.apiKeys import verificar_api_key
+from ATesteForaModelo.apiKeys import verificar_api_key
 
 app = Flask(__name__)
 
