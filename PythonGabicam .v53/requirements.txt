@@ -1,0 +1,4 @@
+# requirements.txt
+Flask
+opencv-python-headless
+numpy

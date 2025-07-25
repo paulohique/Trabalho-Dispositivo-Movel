@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabarito Estilo Tradicional - 10 Questões</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .gabarito-container {
+            width: 280px;
+            background-color: white;
+            position: relative;
+            padding: 20px;
+            border: 3px solid #000;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        /* Pontos de referência nos cantos - MAIORES para melhor detecção */
+        .ponto-referencia {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-color: #000;
+            border-radius: 50%;
+            border: 2px solid #000;
+        }
+        
+        .ponto-tl { top: 5px; left: 5px; }
+        .ponto-tr { top: 5px; right: 5px; }
+        .ponto-bl { bottom: 5px; left: 5px; }
+        .ponto-br { bottom: 5px; right: 5px; }
+        
+        /* Cabeçalho com letras das alternativas */
+        .cabecalho {
+            display: grid;
+            grid-template-columns: 40px repeat(5, 1fr);
+            gap: 5px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #000;
+        }
+        
+        .cabecalho-vazio {
+            /* Espaço para numeração */
+        }
+        
+        .letra-cabecalho {
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            color: #000;
+        }
+        
+        .questoes-grid {
+            display: grid;
+            gap: 5px;
+            margin: 20px 0;
+        }
+        
+        .questao {
+            display: grid;
+            grid-template-columns: 40px repeat(5, 1fr);
+            gap: 5px;
+            align-items: center;
+            padding: 3px 0;
+        }
+        
+        .numero-questao {
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: #000;
+        }
+        
+        .bolha-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .bolha {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #000;
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .bolha.marcada {
+            background-color: #000;
+        }
+        
+        /* .bolha.marcada::after {
+            content: '●';
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        } */
+        
+        /* Botões de controle */
+        .botoes {
+            text-align: center;
+            margin: 15px 0 5px 0;
+        }
+        
+        button {
+            margin: 0 3px;
+            padding: 5px 10px;
+            border: 1px solid #333;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+            background-color: white;
+        }
+        
+        .btn-marcar { background-color: #4CAF50; color: white; border-color: #4CAF50; }
+        .btn-limpar { background-color: #f44336; color: white; border-color: #f44336; }
+        .btn-print { background-color: #2196F3; color: white; border-color: #2196F3; }
+        
+        .info-debug {
+            font-size: 9px;
+            color: #666;
+            text-align: center;
+            margin-top: 8px;
+            font-family: monospace;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+                margin: 0;
+            }
+            .gabarito-container {
+                box-shadow: none;
+                margin: 0;
+            }
+            .botoes, .info-debug { 
+                display: none; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gabarito-container">
+        <!-- Pontos de referência nos cantos -->
+        <div class="ponto-referencia ponto-tl"></div>
+        <div class="ponto-referencia ponto-tr"></div>
+        <div class="ponto-referencia ponto-bl"></div>
+        <div class="ponto-referencia ponto-br"></div>
+        
+        <!-- Cabeçalho com letras -->
+        <div class="cabecalho">
+            <div class="cabecalho-vazio"></div>
+            <div class="letra-cabecalho">A</div>
+            <div class="letra-cabecalho">B</div>
+            <div class="letra-cabecalho">C</div>
+            <div class="letra-cabecalho">D</div>
+            <div class="letra-cabecalho">E</div>
+        </div>
+        
+        <!-- Grade de questões -->
+        <div class="questoes-grid" id="questoes-container">
+            <!-- As questões serão geradas pelo JavaScript -->
+        </div>
+        
+        <!-- Botões de controle -->
+        <!-- <div class="botoes">
+            <button class="btn-marcar" onclick="marcarAleatorio()">Teste</button>
+            <button class="btn-limpar" onclick="limparTudo()">Limpar</button>
+            <button class="btn-print" onclick="window.print()">Imprimir</button>
+        </div>
+        
+        <div class="info-debug" id="respostas-debug">
+            Respostas: __________
+        </div> -->
+    </div>
+
+    <script>
+        const numQuestoes = 10;
+        const alternativas = ['A', 'B', 'C', 'D', 'E'];
+        
+        // Gerar questões
+        function gerarQuestoes() {
+            const container = document.getElementById('questoes-container');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= numQuestoes; i++) {
+                const questaoDiv = document.createElement('div');
+                questaoDiv.className = 'questao';
+                
+                // Número da questão
+                const numeroDiv = document.createElement('div');
+                numeroDiv.className = 'numero-questao';
+                numeroDiv.textContent = i.toString().padStart(2, '0');
+                questaoDiv.appendChild(numeroDiv);
+                
+                // Alternativas
+                alternativas.forEach(letra => {
+                    const bolhaContainer = document.createElement('div');
+                    bolhaContainer.className = 'bolha-container';
+                    
+                    const bolha = document.createElement('div');
+                    bolha.className = 'bolha';
+                    bolha.dataset.questao = i;
+                    bolha.dataset.alternativa = letra;
+                    bolha.onclick = () => marcarBolha(bolha);
+                    
+                    bolhaContainer.appendChild(bolha);
+                    questaoDiv.appendChild(bolhaContainer);
+                });
+                
+                container.appendChild(questaoDiv);
+            }
+        }
+        
+        // Marcar bolha
+        function marcarBolha(bolha) {
+            const questao = bolha.dataset.questao;
+            
+            // Desmarcar outras bolhas da mesma questão
+            document.querySelectorAll(`[data-questao="${questao}"]`).forEach(b => {
+                b.classList.remove('marcada');
+            });
+            
+            // Marcar a bolha clicada
+            bolha.classList.add('marcada');
+            
+            // Atualizar debug
+            atualizarDebug();
+        }
+        
+        // Marcar respostas aleatórias para teste
+        function marcarAleatorio() {
+            limparTudo();
+            
+            for (let i = 1; i <= numQuestoes; i++) {
+                const alternativaAleatoria = alternativas[Math.floor(Math.random() * alternativas.length)];
+                const bolha = document.querySelector(`[data-questao="${i}"][data-alternativa="${alternativaAleatoria}"]`);
+                if (bolha) {
+                    marcarBolha(bolha);
+                }
+            }
+        }
+        
+        // Limpar todas as marcações
+        function limparTudo() {
+            document.querySelectorAll('.bolha').forEach(bolha => {
+                bolha.classList.remove('marcada');
+            });
+            atualizarDebug();
+        }
+        
+        // Obter respostas marcadas
+        function obterRespostas() {
+            const respostas = [];
+            for (let i = 1; i <= numQuestoes; i++) {
+                const bolhaMarcada = document.querySelector(`[data-questao="${i}"].marcada`);
+                if (bolhaMarcada) {
+                    respostas.push(bolhaMarcada.dataset.alternativa);
+                } else {
+                    respostas.push('_');
+                }
+            }
+            return respostas.join('');
+        }
+        
+        // Atualizar debug
+        function atualizarDebug() {
+            const debugDiv = document.getElementById('respostas-debug');
+            debugDiv.textContent = `Respostas: ${obterRespostas()}`;
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            gerarQuestoes();
+            atualizarDebug();
+        });
+        
+        // Log das respostas para debug
+        document.addEventListener('click', function() {
+            setTimeout(() => {
+                console.log('Respostas:', obterRespostas());
+            }, 100);
+        });
+    </script>
+</body>
+</html>

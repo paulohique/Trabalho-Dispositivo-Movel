@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabarito Ultra-Precisão</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .gabarito-container {
+            width: 600px;
+            height: 400px;
+            position: relative;
+            background: white;
+            border: 3px solid #000;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Marcadores fiduciais quadrados nos cantos */
+        .marcador-fiducial {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: black;
+        }
+        
+        .marcador-tl { top: 10px; left: 10px; }
+        .marcador-tr { top: 10px; right: 10px; }
+        .marcador-bl { bottom: 10px; left: 10px; }
+        .marcador-br { bottom: 10px; right: 10px; }
+        
+        .titulo {
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            margin: 40px 0 20px 0;
+            color: #000;
+        }
+        
+        .instrucao {
+            text-align: center;
+            font-size: 12px;
+            margin-bottom: 25px;
+            color: #333;
+        }
+        
+        .grid-questoes {
+            display: grid;
+            grid-template-rows: repeat(5, 1fr);
+            gap: 15px;
+            height: 250px;
+            margin: 0 50px;
+        }
+        
+        .linha-questoes {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .questao {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .numero-questao {
+            font-weight: bold;
+            font-size: 14px;
+            width: 25px;
+            text-align: center;
+            color: #000;
+        }
+        
+        .alternativas {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .alternativa {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+        
+        .bolha {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #000;
+            border-radius: 50%;
+            cursor: pointer;
+            background: white;
+            position: relative;
+        }
+        
+        .bolha.marcada {
+            background-color: #000;
+        }
+        
+        .letra {
+            font-weight: bold;
+            font-size: 12px;
+            color: #000;
+        }
+        
+        /* Controles de teste */
+        .controles {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .btn {
+            margin: 3px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .btn-teste { background: #4CAF50; color: white; }
+        .btn-limpar { background: #f44336; color: white; }
+        .btn-print { background: #2196F3; color: white; }
+        .btn-gabarito { background: #FF9800; color: white; }
+        
+        @media print {
+            .controles { display: none; }
+            body { margin: 0; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="gabarito-container">
+        <!-- Marcadores fiduciais quadrados -->
+        <div class="marcador-fiducial marcador-tl"></div>
+        <div class="marcador-fiducial marcador-tr"></div>
+        <div class="marcador-fiducial marcador-bl"></div>
+        <div class="marcador-fiducial marcador-br"></div>
+        
+        <div class="titulo">FOLHA DE RESPOSTAS - ULTRA PRECISÃO</div>
+        <div class="instrucao">Preencha completamente a bolha da alternativa escolhida</div>
+        
+        <div class="grid-questoes">
+            <!-- Linha 1: Questões 01 e 06 -->
+            <div class="linha-questoes">
+                <div class="questao">
+                    <div class="numero-questao">01</div>
+                    <div class="alternativas">
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="1" data-letra="A" onclick="marcarBolha(this)"></div>
+                            <div class="letra">A</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="1" data-letra="B" onclick="marcarBolha(this)"></div>
+                            <div class="letra">B</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="1" data-letra="C" onclick="marcarBolha(this)"></div>
+                            <div class="letra">C</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="1" data-letra="D" onclick="marcarBolha(this)"></div>
+                            <div class="letra">D</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="1" data-letra="E" onclick="marcarBolha(this)"></div>
+                            <div class="letra">E</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="questao">
+                    <div class="numero-questao">06</div>
+                    <div class="alternativas">
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="6" data-letra="A" onclick="marcarBolha(this)"></div>
+                            <div class="letra">A</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="6" data-letra="B" onclick="marcarBolha(this)"></div>
+                            <div class="letra">B</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="6" data-letra="C" onclick="marcarBolha(this)"></div>
+                            <div class="letra">C</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="6" data-letra="D" onclick="marcarBolha(this)"></div>
+                            <div class="letra">D</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="6" data-letra="E" onclick="marcarBolha(this)"></div>
+                            <div class="letra">E</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Linha 2: Questões 02 e 07 -->
+            <div class="linha-questoes">
+                <div class="questao">
+                    <div class="numero-questao">02</div>
+                    <div class="alternativas">
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="2" data-letra="A" onclick="marcarBolha(this)"></div>
+                            <div class="letra">A</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="2" data-letra="B" onclick="marcarBolha(this)"></div>
+                            <div class="letra">B</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="2" data-letra="C" onclick="marcarBolha(this)"></div>
+                            <div class="letra">C</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="2" data-letra="D" onclick="marcarBolha(this)"></div>
+                            <div class="letra">D</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="2" data-letra="E" onclick="marcarBolha(this)"></div>
+                            <div class="letra">E</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="questao">
+                    <div class="numero-questao">07</div>
+                    <div class="alternativas">
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="7" data-letra="A" onclick="marcarBolha(this)"></div>
+                            <div class="letra">A</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="7" data-letra="B" onclick="marcarBolha(this)"></div>
+                            <div class="letra">B</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="7" data-letra="C" onclick="marcarBolha(this)"></div>
+                            <div class="letra">C</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="7" data-letra="D" onclick="marcarBolha(this)"></div>
+                            <div class="letra">D</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="7" data-letra="E" onclick="marcarBolha(this)"></div>
+                            <div class="letra">E</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Linha 3: Questões 03 e 08 -->
+            <div class="linha-questoes">
+                <div class="questao">
+                    <div class="numero-questao">03</div>
+                    <div class="alternativas">
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="3" data-letra="A" onclick="marcarBolha(this)"></div>
+                            <div class="letra">A</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="3" data-letra="B" onclick="marcarBolha(this)"></div>
+                            <div class="letra">B</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="3" data-letra="C" onclick="marcarBolha(this)"></div>
+                            <div class="letra">C</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="3" data-letra="D" onclick="marcarBolha(this)"></div>
+                            <div class="letra">D</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="3" data-letra="E" onclick="marcarBolha(this)"></div>
+                            <div class="letra">E</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="questao">
+                    <div class="numero-questao">08</div>
+                    <div class="alternativas">
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="8" data-letra="A" onclick="marcarBolha(this)"></div>
+                            <div class="letra">A</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="8" data-letra="B" onclick="marcarBolha(this)"></div>
+                            <div class="letra">B</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="8" data-letra="C" onclick="marcarBolha(this)"></div>
+                            <div class="letra">C</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="8" data-letra="D" onclick="marcarBolha(this)"></div>
+                            <div class="letra">D</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="8" data-letra="E" onclick="marcarBolha(this)"></div>
+                            <div class="letra">E</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Linha 4: Questões 04 e 09 -->
+            <div class="linha-questoes">
+                <div class="questao">
+                    <div class="numero-questao">04</div>
+                    <div class="alternativas">
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="4" data-letra="A" onclick="marcarBolha(this)"></div>
+                            <div class="letra">A</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="4" data-letra="B" onclick="marcarBolha(this)"></div>
+                            <div class="letra">B</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="4" data-letra="C" onclick="marcarBolha(this)"></div>
+                            <div class="letra">C</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="4" data-letra="D" onclick="marcarBolha(this)"></div>
+                            <div class="letra">D</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="4" data-letra="E" onclick="marcarBolha(this)"></div>
+                            <div class="letra">E</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="questao">
+                    <div class="numero-questao">09</div>
+                    <div class="alternativas">
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="9" data-letra="A" onclick="marcarBolha(this)"></div>
+                            <div class="letra">A</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="9" data-letra="B" onclick="marcarBolha(this)"></div>
+                            <div class="letra">B</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="9" data-letra="C" onclick="marcarBolha(this)"></div>
+                            <div class="letra">C</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="9" data-letra="D" onclick="marcarBolha(this)"></div>
+                            <div class="letra">D</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="9" data-letra="E" onclick="marcarBolha(this)"></div>
+                            <div class="letra">E</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Linha 5: Questões 05 e 10 -->
+            <div class="linha-questoes">
+                <div class="questao">
+                    <div class="numero-questao">05</div>
+                    <div class="alternativas">
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="5" data-letra="A" onclick="marcarBolha(this)"></div>
+                            <div class="letra">A</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="5" data-letra="B" onclick="marcarBolha(this)"></div>
+                            <div class="letra">B</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="5" data-letra="C" onclick="marcarBolha(this)"></div>
+                            <div class="letra">C</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="5" data-letra="D" onclick="marcarBolha(this)"></div>
+                            <div class="letra">D</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="5" data-letra="E" onclick="marcarBolha(this)"></div>
+                            <div class="letra">E</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="questao">
+                    <div class="numero-questao">10</div>
+                    <div class="alternativas">
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="10" data-letra="A" onclick="marcarBolha(this)"></div>
+                            <div class="letra">A</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="10" data-letra="B" onclick="marcarBolha(this)"></div>
+                            <div class="letra">B</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="10" data-letra="C" onclick="marcarBolha(this)"></div>
+                            <div class="letra">C</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="10" data-letra="D" onclick="marcarBolha(this)"></div>
+                            <div class="letra">D</div>
+                        </div>
+                        <div class="alternativa">
+                            <div class="bolha" data-questao="10" data-letra="E" onclick="marcarBolha(this)"></div>
+                            <div class="letra">E</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="controles">
+        <div style="margin-bottom: 10px; font-weight: bold; font-size: 14px;">Controles de Teste</div>
+        <button class="btn btn-teste" onclick="marcarAleatorio()">Marcar Aleatório</button>
+        <button class="btn btn-gabarito" onclick="marcarGabarito()">Gabarito Teste</button>
+        <button class="btn btn-limpar" onclick="limparTudo()">Limpar Tudo</button>
+        <button class="btn btn-print" onclick="window.print()">Imprimir</button>
+        <div style="margin-top: 10px; font-size: 12px;">
+            <span id="respostas">Respostas: ----------</span>
+        </div>
+    </div>
+
+    <script>
+        // Gabarito de teste predefinido
+        const gabaritoTeste = 'ABCDEABCDE';
+        
+        function marcarBolha(elemento) {
+            const questao = elemento.dataset.questao;
+            
+            // Desmarcar outras bolhas da mesma questão
+            document.querySelectorAll(`[data-questao="${questao}"]`).forEach(bolha => {
+                bolha.classList.remove('marcada');
+            });
+            
+            // Marcar a bolha clicada
+            elemento.classList.add('marcada');
+            
+            // Atualizar display de respostas
+            atualizarRespostas();
+        }
+        
+        function marcarAleatorio() {
+            limparTudo();
+            
+            const letras = ['A', 'B', 'C', 'D', 'E'];
+            for (let i = 1; i <= 10; i++) {
+                const letraAleatoria = letras[Math.floor(Math.random() * letras.length)];
+                const bolha = document.querySelector(`[data-questao="${i}"][data-letra="${letraAleatoria}"]`);
+                if (bolha) {
+                    marcarBolha(bolha);
+                }
+            }
+        }
+        
+        function marcarGabarito() {
+            limparTudo();
+            
+            for (let i = 1; i <= 10; i++) {
+                const letra = gabaritoTeste[i - 1];
+                const bolha = document.querySelector(`[data-questao="${i}"][data-letra="${letra}"]`);
+                if (bolha) {
+                    marcarBolha(bolha);
+                }
+            }
+        }
+        
+        function limparTudo() {
+            document.querySelectorAll('.bolha').forEach(bolha => {
+                bolha.classList.remove('marcada');
+            });
+            atualizarRespostas();
+        }
+        
+        function obterRespostas() {
+            const respostas = [];
+            for (let i = 1; i <= 10; i++) {
+                const bolhaMarcada = document.querySelector(`[data-questao="${i}"].marcada`);
+                if (bolhaMarcada) {
+                    respostas.push(bolhaMarcada.dataset.letra);
+                } else {
+                    respostas.push('-');
+                }
+            }
+            return respostas.join('');
+        }
+        
+        function atualizarRespostas() {
+            const respostas = obterRespostas();
+            document.getElementById('respostas').textContent = `Respostas: ${respostas}`;
+            
+            // Mostrar também no console para debug
+            console.log('Respostas atuais:', respostas);
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            atualizarRespostas();
+            console.log('Template Ultra-Precisão carregado!');
+            console.log('Gabarito de teste:', gabaritoTeste);
+        });
+    </script>
+</body>
+</html>
